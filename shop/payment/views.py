@@ -1,13 +1,14 @@
 import stripe
+from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.base import TemplateView
+
 from market.models import Item
 
 from .models import ItemInCart, Order
 
-stripe.api_key = "sk_test_51LjMpFE2KYKgRLYgaiXSirAFC5Dlh6mePHeRVdozkKPeYLwUHBaG3ky724Jmy5UgsNsCFvLrLvClinCBmWZNM0Vj002FE7bZR0"
-
-DOMAIN = "http://127.0.0.1:8000"
+stripe.api_key = settings.API_KEY
+DOMAIN = settings.DOMAIN
 
 
 class SuccessView(TemplateView):
@@ -16,6 +17,13 @@ class SuccessView(TemplateView):
 
 class CancelView(TemplateView):
     template_name = "payment/cancel.html"
+
+
+def add_to_cart(request, pk):
+    order, status = Order.objects.get_or_create(buyer=request.user)
+    item = Item.objects.get(pk=pk)
+    ItemInCart.objects.create(order=order, item=item)
+    return redirect("market:item", pk=pk)
 
 
 def buy(request, pk):

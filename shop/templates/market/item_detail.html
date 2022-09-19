@@ -14,9 +14,13 @@
           <h5> {{ price }} {{ item.currency }}</h5>
         </div>
       </div>
+      <form action="{% url 'payment:add_to_cart' item.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" id="checkout-button">Добавить в корзину</button>
+      </form>
       <form action="{% url 'payment:buy' user.id %}" method="POST">
         {% csrf_token %}
-        <button type="submit" id="checkout-button">Купить</button>
+        <button type="submit" id="checkout-button">Оформить заказ</button>
       </form>
     </section>
   </body>

@@ -1,12 +1,33 @@
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-+&auv4)%5hd7v1&j-ems@+3z(r#ai3&ww*#b*82pd&+-z1c(42"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    default="django-insecure-+&auv4)%5hd7v1&j-ems@+3z(r#ai3&ww*#b*82pd&+-z1c(42",
+)
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG") == "True"
 
-ALLOWED_HOSTS = []
+API_KEY = os.getenv(
+    "API_KEY",
+    default="sk_test_51LjMpFE2KYKgRLYgaiXSirAFC5Dlh6mePHeRVdozkKPeYLwUHBaG3ky724Jmy5UgsNsCFvLrLvClinCBmWZNM0Vj002FE7bZR0",
+)
+
+DOMAIN = "http://127.0.0.1:8000"
+
+ALLOWED_HOSTS = ["*"]
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR.joinpath("static")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR.joinpath("media")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -54,8 +75,12 @@ WSGI_APPLICATION = "shop.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.postgresql"),
+        "NAME": os.getenv("DB_NAME", default="postgres"),
+        "USER": os.getenv("POSTGRES_USER", default="postgres"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="postgres"),
+        "HOST": os.getenv("DB_HOST", default="db"),
+        "PORT": os.getenv("DB_PORT", default=5432),
     }
 }
 
