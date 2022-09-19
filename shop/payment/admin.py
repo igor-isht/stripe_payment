@@ -1,14 +1,21 @@
 from django.contrib import admin
 
-from .models import Order, Discount
+from .models import Discount, ItemInCart, Order
 
+
+class ItemInCartAdmin(admin.StackedInline):
+    model = ItemInCart
+    extra = 1
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = (
-        'buyer',
-    )
+    inlines = [ItemInCartAdmin]
+    list_display = ("buyer",)
 
 
-admin.site.register(Discount)
+class DiscountAdmin(admin.ModelAdmin):
+    list_display = ("name", "percent_off", "amount_off", "expires_at")
+
+
+admin.site.register(Discount, DiscountAdmin)
 admin.site.register(Order, OrderAdmin)

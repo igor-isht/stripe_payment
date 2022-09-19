@@ -8,6 +8,6 @@ class Item(models.Model):
     currency = models.CharField(max_length=3)
 
     class Meta:
-        ordering = ['name']
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
+        ordering = ["name"]
+        verbose_name = "Товар"
+        verbose_name_plural = "Товары"
